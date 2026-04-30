@@ -1,0 +1,5 @@
+gymnasium[classic_control]
+stable-baselines3
+shimmy
+matplotlib
+tensorboard
