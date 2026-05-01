@@ -58,19 +58,12 @@ def test_agent(episodes=5):
         terminated = False
         truncated = False
         
-        print(f"--- Episode {i+1} ---")
-        
         while not (terminated or truncated):
             # 3. Policy: Luôn chọn hành động tốt nhất (Exploit) 
             # Đặt epsilon = 0 [cite: 139, 233]
             action = np.argmax(q[state, :])
             
             state, reward, terminated, truncated, _ = env.step(action)
-            
-        if reward == 1:
-            print("Agent đã về đích thành công!")
-        else:
-            print("Agent đã thất bại.")
 
     env.close()
 
