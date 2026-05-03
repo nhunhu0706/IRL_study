@@ -3,7 +3,7 @@ from stable_baselines3 import PPO
 
 env = gym.make("CartPole-v1", render_mode = "rbg_array")
 
-model = PPO("MlpPolicy", env, verbose=1, seed= 123)
+model = PPO("MlpPolicy", env, verbose=1, seed= 123, tensorboard_log="./ppo_cartpole_logs/")
 
 model.learn(total_timesteps=95000)
 

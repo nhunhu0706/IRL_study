@@ -1,0 +1,7 @@
+# config.yaml - PPO Baseline for CartPole-v1
+algorithm: "PPO"
+policy_network: "MlpPolicy"
+learning_rate: 0.0003
+gamma: 0.99
+total_timesteps: 95000
+seed: 123
