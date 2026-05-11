@@ -2,19 +2,18 @@ import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
-
 def run(episodes):
-    env = gym.make('FrozenLake-v1', map_name = '4x4', is_slippery=False, render_mode = None)
     SEED = 42
-
+    env = gym.make('FrozenLake-v1', map_name = '4x4', is_slippery=True, render_mode = None)
     np.random.seed(SEED)
+    env.action_space.seed(SEED)
     q = np.zeros((env.observation_space.n, env.action_space.n))
 
     a = 0.1 #learning rate alpha
     g = 0.9 #discount factor gamma
     e = 1
-    e_decay_rate = 1/episodes
-    rng = np.random.default_rng()
+    e_decay_rate = 2/episodes
+    rng = np.random.default_rng(SEED)
     rewards_per_episode=np.zeros(episodes)
 
     for i in range(episodes):
@@ -47,26 +46,30 @@ def run(episodes):
     pickle.dump(q,f)
     f.close()
 
-
-env = gym.make('FrozenLake-v1', map_name = '4x4', is_slippery=False, render_mode = 'human')
-
+env = gym.make('FrozenLake-v1', map_name = '4x4', is_slippery=True, render_mode = None)
 with open('frozen_lake.pkl', 'rb') as f:
     q = pickle.load(f)
-def test_agent(episodes=5):
+def test_agent(episodes=100):
+    wins = 0
+    SEED = 42
+
     for i in range(episodes):
-        state, _ = env.reset()
+        if i == 0:
+            state, _ = env.reset(seed=SEED)
+        else:
+            state, _ = env.reset()
         terminated = False
         truncated = False
         
         while not (terminated or truncated):
-            # 3. Policy: Luôn chọn hành động tốt nhất (Exploit) 
-            # Đặt epsilon = 0 [cite: 139, 233]
             action = np.argmax(q[state, :])
             
             state, reward, terminated, truncated, _ = env.step(action)
-
+            if terminated and reward == 1.0:
+                wins += 1
     env.close()
+    print(wins)
 
 if __name__ == '__main__':
-    run(2000)
+    run(15000)
     test_agent()
